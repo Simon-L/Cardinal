@@ -135,24 +135,46 @@ endif
 # --------------------------------------------------------------
 # Build targets
 
+WITH_FX ?= true
+WITH_SYNTH ?= true
+WITH_FULL ?= true
+
 TARGET = rack.a
 
 all: $(TARGET)
+ifeq ($(WITH_FX),true)
 	$(MAKE) -C CardinalFX
+endif
+ifeq ($(WITH_SYNTH),true)
 	$(MAKE) -C CardinalSynth
+endif
+ifeq ($(WITH_FULL),true)
 	$(MAKE) -C Cardinal
+endif
 
 resources:
+ifeq ($(WITH_FULL),true)
 	$(MAKE) resources -C Cardinal
+endif
+ifeq ($(WITH_FX),true)
 	$(MAKE) resources -C CardinalFX
+endif
+ifeq ($(WITH_SYNTH),true)
 	$(MAKE) resources -C CardinalSynth
+endif
 
 clean:
 	rm -f $(TARGET)
 	rm -rf $(BUILD_DIR)
+ifeq ($(WITH_FULL),true)
 	$(MAKE) clean -C Cardinal
+endif
+ifeq ($(WITH_FX),true)
 	$(MAKE) clean -C CardinalFX
+endif
+ifeq ($(WITH_SYNTH),true)
 	$(MAKE) clean -C CardinalSynth
+endif
 
 # --------------------------------------------------------------
 # Build commands
