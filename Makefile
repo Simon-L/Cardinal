@@ -110,10 +110,15 @@ resources: cardinal
 
 ifneq ($(CROSS_COMPILING),true)
 gen: cardinal resources dpf/utils/lv2_ttl_generator
+ifeq ($(AS_LV2),true)
 	@$(CURDIR)/dpf/utils/generate-ttl.sh
+endif
 
 dpf/utils/lv2_ttl_generator:
+ifeq ($(AS_LV2),true)
 	$(MAKE) -C dpf/utils/lv2-ttl-generator
+endif
+
 else
 gen:
 endif

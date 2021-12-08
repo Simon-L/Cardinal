@@ -234,9 +234,33 @@ BUILD_CXX_FLAGS += -DCARDINAL_PLUGIN_PREFIX='"$(PREFIX)"'
 # --------------------------------------------------------------
 # Enable all possible plugin types and setup resources
 
+AS_JACK ?= true
+AS_VST2 ?= true
+AS_VST3 ?= true
+AS_LV2 ?= true
+
+ifeq ($(AS_JACK),true)
+as_fx += jack
+as_full += jack
+as_synth += jack
+endif
+ifeq ($(AS_VST2),true)
+as_fx += vst2
+as_synth += vst2
+endif
+ifeq ($(AS_VST3),true)
+as_full += vst3
+as_synth += vst3
+endif
+ifeq ($(AS_LV2),true)
+as_fx += lv2
+as_full += lv2
+as_synth += lv2
+endif
+
 ifeq ($(NAME),CardinalFX)
 
-all: jack vst2 lv2 resources
+all: $(as_fx) resources
 
 CORE_RESOURCES = $(filter-out icon.png,$(subst ../Rack/res/,,$(wildcard ../Rack/res/*))) template.vcv
 
@@ -251,9 +275,9 @@ PLUGIN_RESOURCES += $(CORE_RESOURCES:%=$(TARGET_DIR)/CardinalFX.vst3/Contents/Re
 else # CardinalFX
 
 ifeq ($(NAME),Cardinal)
-all: jack lv2 vst3 resources
+all: $(as_full) resources
 else
-all: jack lv2 vst2 vst3 resources
+all: $(as_synth) resources
 endif
 
 PLUGIN_RESOURCES += $(TARGET_DIR)/$(NAME).lv2/resources
@@ -275,9 +299,15 @@ endif # CardinalFX
 resources: $(PLUGIN_RESOURCES)
 
 ifneq ($(NAME),CardinalFX)
+ifeq ($(AS_LV2),true)
 lv2: resources
+endif
+ifeq ($(AS_VST2),true)
 vst2: resources
+endif
+ifeq ($(AS_VST3),true)
 vst3: resources
+endif
 $(TARGET_DIR)/$(NAME).%: $(TARGET_DIR)/CardinalFX.%
 	-@mkdir -p "$(shell dirname $@)"
 	$(SILENT)ln -sf $(abspath $<) $@
