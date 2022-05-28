@@ -558,6 +558,9 @@ extern Model* modelArpeggiator;
 #undef loadBack
 std::string loadBack(int) { return "res/Empty_gray.svg"; }
 
+// ModScript
+#include "ModScript/src/plugin.hpp"
+
 // Mog
 #include "Mog/src/plugin.hpp"
 
@@ -756,6 +759,7 @@ Plugin* pluginInstance__Meander;
 extern Plugin* pluginInstance__MindMeld;
 Plugin* pluginInstance__ML;
 Plugin* pluginInstance__MockbaModular;
+Plugin* pluginInstance__ModScript;
 Plugin* pluginInstance__Mog;
 extern Plugin* pluginInstance__mscHack;
 Plugin* pluginInstance__MSM;
@@ -2248,6 +2252,18 @@ static void initStatic__MockbaModular()
     }
 }
 
+static void initStatic__ModScript()
+{
+    Plugin* const p = new Plugin;
+    pluginInstance__ModScript = p;
+
+    const StaticPluginLoader spl(p, "ModScript");
+    if (spl.ok())
+    {
+        p->addModel(modelLune);
+    }    
+}
+
 static void initStatic__Mog()
 {
     Plugin* const p = new Plugin;
@@ -2722,6 +2738,7 @@ void initStaticPlugins()
     initStatic__MindMeld();
     initStatic__ML();
     initStatic__MockbaModular();
+    initStatic__ModScript();
     initStatic__Mog();
     initStatic__mscHack();
     initStatic__MSM();

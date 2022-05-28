@@ -706,6 +706,11 @@ PLUGIN_FILES += $(filter-out MockbaModular/src/plugin.cpp MockbaModular/src/Mock
 MOCKBAMODULAR_CUSTOM = Blank Comparator
 
 # --------------------------------------------------------------
+# ModScript
+
+PLUGIN_FILES += $(filter-out ModScript/src/plugin.cpp,$(wildcard ModScript/src/*.cpp))
+
+# --------------------------------------------------------------
 # Mog
 
 PLUGIN_FILES += Mog/src/Network.cpp
@@ -1680,6 +1685,13 @@ $(BUILD_DIR)/MockbaModular/%.cpp.o: MockbaModular/%.cpp
 	$(SILENT)$(CXX) $< $(BUILD_CXX_FLAGS) -c -o $@ \
 		$(foreach m,$(MOCKBAMODULAR_CUSTOM),$(call custom_module_names,$(m),MockbaModular)) \
 		-DpluginInstance=pluginInstance__MockbaModular
+
+$(BUILD_DIR)/ModScript/src/%.cpp.o: ModScript/src/%.cpp
+	-@mkdir -p "$(shell dirname $(BUILD_DIR)/$<)"
+	@echo "Compiling $<"
+	$(SILENT)$(CXX) $< $(BUILD_CXX_FLAGS) -c -o $@ \
+		$(foreach m,$(MODSCRIPT_CUSTOM),$(call custom_module_names,$(m),ModScript)) \
+		-DpluginInstance=pluginInstance__ModScript \
 
 $(BUILD_DIR)/Mog/%.cpp.o: Mog/%.cpp
 	-@mkdir -p "$(shell dirname $(BUILD_DIR)/$<)"

@@ -242,12 +242,34 @@ $(DEP_PATH)/lib/libquickjs.a:
 	install -m644 $(CURDIR)/QuickJS/quickjs.h $(DEP_PATH)/include/quickjs.h
 
 # --------------------------------------------------------------
+# LuaJIT target, needed for ModScript
+
+LUAJIT_MAKE_FLAGS = CFLAGS="$(BUILD_C_FLAGS) -D_GNU_SOURCE -DCONFIG_VERSION='\"Cardinal\"' -w"
+
+ifeq ($(WITH_LTO),true)
+LUAJIT_MAKE_FLAGS += CONFIG_LTO=y
+else
+LUAJIT_MAKE_FLAGS += CONFIG_LTO=
+endif
+
+LUAJIT_FILES_INC= $(CURDIR)/LuaJIT/src/lua.h $(CURDIR)/LuaJIT/src/lualib.h $(CURDIR)/LuaJIT/src/lauxlib.h $(CURDIR)/LuaJIT/src/luaconf.h \
+				  $(CURDIR)/LuaJIT/src/lua.hpp $(CURDIR)/LuaJIT/src/luajit.h
+
+$(DEP_PATH)/lib/libluajit-5.1.a:
+	$(DEP_MAKE) $(LUAJIT_MAKE_FLAGS) BUILDMODE=static -C $(CURDIR)/LuaJIT
+	install -d $(DEP_PATH)/include/luajit-2.0
+	install -d $(DEP_PATH)/lib
+	install -m644 $(CURDIR)/LuaJIT/src/libluajit.a $@
+	install -m644 $(LUAJIT_FILES_INC) $(DEP_PATH)/include/luajit-2.0
+
+# --------------------------------------------------------------
 # Build targets
 
 TARGETS += $(DEP_PATH)/lib/libjansson.a
 TARGETS += $(DEP_PATH)/lib/libquickjs.a
 TARGETS += $(DEP_PATH)/lib/libsamplerate.a
 TARGETS += $(DEP_PATH)/lib/libspeexdsp.a
+TARGETS += $(DEP_PATH)/lib/libluajit-5.1.a
 
 ifeq ($(WINDOWS),true)
 TARGETS += $(DEP_PATH)/lib/libarchive_static.a
@@ -261,6 +283,7 @@ all: $(TARGETS)
 
 clean:
 	$(DEP_MAKE) $(QUICKJS_MAKE_FLAGS) -C $(CURDIR)/QuickJS clean
+	$(DEP_MAKE) $(LUAJIT_MAKE_FLAGS) -C $(CURDIR)/LuaJIT clean
 	rm -f $(TARGETS)
 	rm -f $(DEP_PATH)/*.tgz
 	rm -f $(DEP_PATH)/*.tar.gz
@@ -282,5 +305,7 @@ download: \
 	$(DEP_PATH)/zstd-1.4.5/.stamp-patched
 
 quickjs: $(DEP_PATH)/lib/libquickjs.a
+
+luajit: $(DEP_PATH)/lib/libluajit-5.1.a
 
 # --------------------------------------------------------------

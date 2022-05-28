@@ -99,6 +99,7 @@ endif
 RACK_EXTRA_LIBS  = ../../plugins/plugins.a
 RACK_EXTRA_LIBS += ../rack.a
 RACK_EXTRA_LIBS += $(DEP_LIB_PATH)/libquickjs.a
+RACK_EXTRA_LIBS += $(DEP_LIB_PATH)/libluajit-5.1.a
 
 ifneq ($(SYSDEPS),true)
 RACK_EXTRA_LIBS += $(DEP_LIB_PATH)/libjansson.a
