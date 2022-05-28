@@ -209,3 +209,6 @@
 [submodule "deps/LuaJIT"]
 	path = deps/LuaJIT
 	url = https://github.com/LuaJIT/LuaJIT
+[submodule "plugins/ModScript"]
+	path = plugins/ModScript
+	url = https://github.com/Simon-L/ModScript

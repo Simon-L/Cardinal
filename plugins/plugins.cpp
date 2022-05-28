@@ -2261,6 +2261,7 @@ static void initStatic__ModScript()
     if (spl.ok())
     {
         p->addModel(modelLune);
+        p->addModel(modelPleineLune);
     }    
 }
 
