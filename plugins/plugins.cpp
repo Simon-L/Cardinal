@@ -938,6 +938,8 @@ static void initStatic__Cardinal()
             modelHostParameters,
             modelHostParametersMap,
             modelHostTime,
+            modelLune,
+            modelPleineLune
         };
     }
 }
