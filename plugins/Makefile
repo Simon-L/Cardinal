@@ -1084,6 +1084,7 @@ RESOURCE_FILES += MindMeldModular/res/ShapeMaster/CommunityShapes
 RESOURCE_FILES += MindMeldModular/res/ShapeMaster/MindMeldPresets
 RESOURCE_FILES += MindMeldModular/res/ShapeMaster/MindMeldShapes
 RESOURCE_FILES += Meander/res
+RESOURCE_FILES += ModScript/scripts
 RESOURCE_FILES += Mog/res
 RESOURCE_FILES += nonlinearcircuits/res
 RESOURCE_FILES += ParableInstruments/res/Neil.png
